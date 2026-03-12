@@ -739,13 +739,53 @@ function buscarEnMapa(){ const q=encodeURIComponent([document.getElementById('ub
 async function confirmarPedido(){
   const calle=document.getElementById('ub-calle').value.trim();
   if(!calle){mostrarToast("⚠️ Escribe calle y número");return;}
-  ubicacionPedido={calle,ciudad:document.getElementById('ub-ciudad').value.trim(),cp:document.getElementById('ub-cp').value.trim(),ref:document.getElementById('ub-ref').value.trim(),notas:document.getElementById('ub-notas').value.trim()};
+
+  // Bloquear botón mientras guarda
+  const btnGen=document.querySelector('#modal-ubicacion button:last-child');
+  if(btnGen){btnGen.disabled=true;btnGen.textContent='⏳ Guardando...';}
+
+  ubicacionPedido={
+    calle,
+    ciudad:document.getElementById('ub-ciudad').value.trim(),
+    cp:document.getElementById('ub-cp').value.trim(),
+    ref:document.getElementById('ub-ref').value.trim(),
+    notas:document.getElementById('ub-notas').value.trim()
+  };
   ubicacionPedido.completa=[ubicacionPedido.calle,ubicacionPedido.ciudad,ubicacionPedido.cp,ubicacionPedido.ref].filter(Boolean).join(', ');
+
   const folio='PED-'+Date.now().toString().slice(-8);
-  pedidoActual={folio,cliente,carrito:[...carrito],ubicacion:ubicacionPedido,totales:calcularTotales(),fecha:new Date().toLocaleString('es-MX'),negocio:{...NEGOCIO}};
-  try{ await fetch(APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({accion:'guardarPedido',payload:{ClienteNombre:cliente.nombre,Telefono:cliente.tel,Email:cliente.email,Direccion:ubicacionPedido.completa,Productos:carrito.map(i=>`${i.marca} ${i.medida} x${i.cantidad}`).join(', '),Total:calcularTotales().total,Notas:ubicacionPedido.notas}})}); }catch(e){}
+  const totales=calcularTotales();
+  pedidoActual={folio,cliente,carrito:[...carrito],ubicacion:ubicacionPedido,totales,fecha:new Date().toLocaleString('es-MX'),negocio:{...NEGOCIO}};
+
+  // Guardar en Sheets con estado "en_proceso"
+  let guardadoOk=false;
+  try{
+    const res=await fetch(APPS_SCRIPT_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        accion:'guardarPedido',
+        payload:{
+          ClienteNombre:cliente.nombre,
+          Telefono:cliente.tel,
+          Email:cliente.email,
+          Direccion:ubicacionPedido.completa,
+          Productos:carrito.map(i=>`${i.marca} ${i.medida} x${i.cantidad}`).join(', '),
+          Total:totales.total,
+          Estado:'en_proceso',
+          Notas:ubicacionPedido.notas
+        }
+      })
+    });
+    const d=await res.json();
+    guardadoOk=d.ok;
+    if(d.ID) pedidoActual.folioServidor=d.ID;
+  }catch(e){}
+
+  if(btnGen){btnGen.disabled=false;btnGen.textContent='✅ Generar pedido';}
   document.getElementById('modal-ubicacion').classList.remove('visible');
-  document.getElementById('pdf-folio-txt').textContent=`Folio: ${folio}`;
+  document.getElementById('pdf-folio-txt').textContent=
+    `Folio: ${pedidoActual.folioServidor||folio}${guardadoOk?' · ✅ Registrado en sistema':' · ⚠️ Sin conexión al servidor'}`;
   document.getElementById('modal-pdf-ok').style.display='flex';
 }
 function cerrarModalPDF(){ document.getElementById('modal-pdf-ok').style.display='none'; carrito=[]; actualizarBarraCarrito(); mostrarToast("✅ ¡Listo!"); }
