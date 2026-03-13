@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,7 +16,6 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--negro); color: var(--blanco); font-family: 'Barlow', sans-serif; min-height: 100vh; overflow-x: hidden; }
 
-  /* BIENVENIDA */
   #pantalla-inicio { position: fixed; inset: 0; z-index: 1000; background: var(--negro); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; }
   .bienvenida-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 60%, rgba(255,215,0,0.07) 0%, transparent 65%); pointer-events: none; }
   .bienvenida-content { position: relative; z-index: 1; text-align: center; display: flex; flex-direction: column; align-items: center; }
@@ -30,13 +30,11 @@
   .whatsapp-direct { margin-top: 2rem; color: var(--gris); font-size: 0.82rem; text-align: center; }
   .whatsapp-direct a { color: #25D366; text-decoration: none; font-weight: 600; }
 
-  /* SPINNER */
   .spinner-wrap { display: flex; flex-direction: column; align-items: center; gap: 1rem; padding: 3rem; grid-column: 1/-1; }
   .spinner { width: 48px; height: 48px; border: 4px solid #222; border-top-color: var(--amarillo); border-radius: 50%; animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .spinner-txt { color: var(--gris); font-size: 0.85rem; }
 
-  /* BARRA */
   #barra-top { position: sticky; top: 0; z-index: 100; background: var(--negro2); border-bottom: 2px solid var(--amarillo); padding: 0.7rem 1rem; display: none; }
   .barra-inner { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
   .logo-barra { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.3rem; color: var(--amarillo); letter-spacing: -1px; }
@@ -45,7 +43,21 @@
   .btn-carrito:active { background: var(--amarillo2); }
   .carrito-badge { background: var(--rojo); color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 0.65rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
 
-  /* CATÁLOGO */
+  /* ── BANNER REACTIVACIÓN ── */
+  #banner-reactivacion {
+    display: none; position: sticky; top: 58px; z-index: 99;
+    background: #1a1400; border-bottom: 1px solid var(--amarillo);
+    padding: 0.5rem 1rem; text-align: center;
+    font-size: 0.82rem; color: var(--amarillo);
+    display: none; align-items: center; justify-content: center; gap: 0.75rem;
+  }
+  #banner-reactivacion button {
+    background: var(--amarillo); color: var(--negro); border: none;
+    border-radius: 20px; padding: 0.2rem 0.8rem;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+    font-size: 0.8rem; cursor: pointer;
+  }
+
   #catalogo-section { display: none; padding: 1rem; }
   .catalogo-titulo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.8rem; color: var(--amarillo); margin-bottom: 0.2rem; }
   .catalogo-sub { font-size: 0.8rem; color: var(--gris); margin-bottom: 1rem; }
@@ -57,11 +69,15 @@
   .producto-card { background: var(--negro3); border-radius: 12px; overflow: hidden; border: 1px solid #222; }
   .producto-card.agotado { opacity: 0.55; }
   .prod-img-wrap { position: relative; aspect-ratio: 1; background: #111; cursor: pointer; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-  .prod-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .img-fallback { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; background: linear-gradient(135deg,#1a1a1a,#111); font-size: 2.4rem; }
+
+  /* Imagen: fallback visible por defecto, real encima cuando carga */
+  .img-fallback { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; background: linear-gradient(135deg,#1a1a1a,#111); font-size: 2.4rem; z-index: 1; }
   .img-fallback small { font-size: 0.65rem; color: var(--gris); font-family: 'Barlow Condensed',sans-serif; letter-spacing: 1px; text-transform: uppercase; }
-  .hint-swipe { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.75); color: var(--amarillo); font-size: 0.62rem; padding: 2px 8px; border-radius: 10px; white-space: nowrap; pointer-events: none; font-family: 'Barlow Condensed',sans-serif; }
-  .stock-badge { position: absolute; top: 6px; right: 6px; background: var(--verde); color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 600; z-index: 2; }
+  .img-real { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 2; opacity: 0; transition: opacity 0.3s; }
+  .img-real.ok { opacity: 1; }
+
+  .hint-swipe { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.75); color: var(--amarillo); font-size: 0.62rem; padding: 2px 8px; border-radius: 10px; white-space: nowrap; pointer-events: none; font-family: 'Barlow Condensed',sans-serif; z-index: 3; }
+  .stock-badge { position: absolute; top: 6px; right: 6px; background: var(--verde); color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 600; z-index: 4; }
   .stock-badge.bajo { background: #d69e2e; }
   .stock-badge.agotado { background: var(--rojo); }
   .prod-info { padding: 0.6rem; }
@@ -70,14 +86,12 @@
   .prod-precio { font-family: 'Barlow Condensed',sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--blanco); margin-top: 0.2rem; }
   .btn-detalles { width: 100%; margin-top: 0.4rem; padding: 0.35rem; background: transparent; border: 1px solid #333; border-radius: 6px; color: var(--gris); font-size: 0.75rem; cursor: pointer; transition: all 0.2s; }
   .btn-detalles:active { border-color: var(--amarillo); color: var(--amarillo); }
-  .swipe-feedback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 3rem; opacity: 0; pointer-events: none; transition: opacity 0.2s; border-radius: 12px; }
+  .swipe-feedback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 3rem; opacity: 0; pointer-events: none; transition: opacity 0.2s; border-radius: 12px; z-index: 5;}
   .swipe-feedback.no-show { background: rgba(229,62,62,0.3); opacity: 1; }
   .swipe-feedback.si-show { background: rgba(56,161,105,0.3); opacity: 1; }
 
-  /* MODALES base */
   @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-  /* MODAL IMAGEN */
   #modal-imagen { display: none; position: fixed; inset: 0; z-index: 500; background: rgba(0,0,0,0.95); flex-direction: column; align-items: center; justify-content: center; }
   #modal-imagen.visible { display: flex; }
   .modal-img-container { position: relative; width: 90vw; max-width: 400px; touch-action: pan-y; }
@@ -91,8 +105,10 @@
   .modal-nombre-grande { font-family: 'Barlow Condensed',sans-serif; font-size: 1.2rem; color: var(--blanco); margin-bottom: 0.3rem; }
   .btn-modal-cerrar { position: absolute; top: 1rem; right: 1rem; background: var(--negro3); border: 1px solid #333; color: var(--blanco); width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; }
   .btn-ver-detalles-modal { margin-top: 0.8rem; padding: 0.7rem 2rem; background: transparent; border: 1px solid var(--amarillo); color: var(--amarillo); border-radius: 8px; font-family: 'Barlow Condensed',sans-serif; font-size: 1rem; cursor: pointer; }
+  .swipe-feedback-m { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 3rem; opacity: 0; pointer-events: none; transition: opacity 0.2s; border-radius: 12px; }
+  .swipe-feedback-m.no-show { background: rgba(229,62,62,0.3); opacity: 1; }
+  .swipe-feedback-m.si-show { background: rgba(56,161,105,0.3); opacity: 1; }
 
-  /* MODAL DETALLES */
   #modal-detalles { display: none; position: fixed; inset: 0; z-index: 600; background: rgba(0,0,0,0.9); align-items: flex-end; justify-content: center; }
   #modal-detalles.visible { display: flex; }
   .detalles-sheet { background: var(--negro2); border-top: 2px solid var(--amarillo); border-radius: 20px 20px 0 0; width: 100%; max-width: 500px; padding: 1.5rem 1.5rem 2rem; animation: slideUp 0.3s ease; max-height: 85vh; overflow-y: auto; }
@@ -106,7 +122,6 @@
   .btn-volver-img { width: 100%; padding: 0.7rem; background: transparent; border: 1px solid #333; color: var(--gris); border-radius: 8px; font-family: 'Barlow Condensed',sans-serif; font-size: 1rem; cursor: pointer; margin-bottom: 0.5rem; }
   .btn-agregar-detalles { width: 100%; padding: 0.85rem; background: var(--amarillo); color: var(--negro); border: none; border-radius: 8px; font-family: 'Barlow Condensed',sans-serif; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
 
-  /* RULETA */
   #modal-cantidad { display: none; position: fixed; inset: 0; z-index: 700; background: rgba(0,0,0,0.92); align-items: center; justify-content: center; flex-direction: column; }
   #modal-cantidad.visible { display: flex; }
   .cantidad-card { background: var(--negro2); border: 2px solid var(--amarillo); border-radius: 16px; padding: 1.5rem; width: 85vw; max-width: 300px; text-align: center; }
@@ -121,7 +136,6 @@
   .btn-cant-cancelar { flex: 1; padding: 0.75rem; background: transparent; border: 1px solid var(--rojo); color: var(--rojo); border-radius: 8px; font-family: 'Barlow Condensed',sans-serif; font-size: 1rem; cursor: pointer; }
   .btn-cant-ok { flex: 1; padding: 0.75rem; background: var(--amarillo); color: var(--negro); border: none; border-radius: 8px; font-family: 'Barlow Condensed',sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; }
 
-  /* CARRITO */
   #drawer-carrito { display: none; position: fixed; inset: 0; z-index: 800; background: rgba(0,0,0,0.85); align-items: flex-end; justify-content: center; }
   #drawer-carrito.visible { display: flex; }
   .carrito-sheet { background: var(--negro2); border-top: 2px solid var(--amarillo); border-radius: 20px 20px 0 0; width: 100%; max-width: 500px; padding: 1.5rem 1.5rem 2rem; max-height: 85vh; display: flex; flex-direction: column; animation: slideUp 0.3s ease; }
@@ -141,7 +155,6 @@
   .carrito-vacio .emoji { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
   #resumen-fiscal { display: none; margin-top: .75rem; border-top: 1px solid #222; padding-top: .75rem; }
 
-  /* DATOS CLIENTE */
   #modal-datos-cliente { display: none; position: fixed; inset: 0; z-index: 805; background: rgba(0,0,0,0.92); align-items: flex-end; justify-content: center; }
   #modal-datos-cliente.visible { display: flex; }
   .datos-sheet { background: var(--negro2); border-top: 2px solid var(--amarillo); border-radius: 20px 20px 0 0; width: 100%; max-width: 500px; padding: 1.5rem 1.5rem 2rem; animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto; }
@@ -157,7 +170,6 @@
   .btn-datos-cancelar { flex: 1; padding: 0.85rem; background: transparent; border: 1px solid #333; color: var(--gris); border-radius: 8px; font-family: 'Barlow Condensed',sans-serif; font-size: 1rem; cursor: pointer; }
   .btn-datos-continuar { flex: 2; padding: 0.85rem; background: var(--amarillo); color: var(--negro); border: none; border-radius: 8px; font-family: 'Barlow Condensed',sans-serif; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
 
-  /* UBICACIÓN */
   #modal-ubicacion { display: none; position: fixed; inset: 0; z-index: 810; background: rgba(0,0,0,.9); align-items: flex-end; justify-content: center; }
   #modal-ubicacion.visible { display: flex; }
   .ubicacion-sheet { background: #111; border-top: 2px solid #FFD700; border-radius: 20px 20px 0 0; width: 100%; max-width: 500px; padding: 1.5rem; animation: slideUp .3s ease; max-height: 90vh; overflow-y: auto; }
@@ -167,38 +179,24 @@
   .ub-grupo { margin-bottom:.75rem; }
   .ub-grid2 { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; margin-bottom:.75rem; }
 
-  /* PDF OK */
   #modal-pdf-ok { display: none; position: fixed; inset: 0; z-index: 820; background: rgba(0,0,0,.92); align-items: center; justify-content: center; padding: 1rem; }
 
-  /* TOAST */
   #toast { position: fixed; bottom: 5rem; left: 50%; transform: translateX(-50%) translateY(10px); background: var(--negro2); border: 1px solid var(--amarillo); color: var(--blanco); padding: 0.6rem 1.2rem; border-radius: 30px; font-size: 0.85rem; opacity: 0; transition: all 0.3s; z-index: 900; white-space: nowrap; }
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-  /* QR */
-  /* BOTÓN FLOTANTE QR */
-  #btn-qr-flotante {
-    position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 200;
-    width: 52px; height: 52px; border-radius: 50%;
-    background: var(--amarillo); border: none; cursor: pointer;
-    box-shadow: 0 4px 20px rgba(255,215,0,0.35);
-    display: none; align-items: center; justify-content: center;
-    font-size: 1.4rem; transition: transform 0.15s, box-shadow 0.15s;
-  }
+  #btn-qr-flotante { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 200; width: 52px; height: 52px; border-radius: 50%; background: var(--amarillo); border: none; cursor: pointer; box-shadow: 0 4px 20px rgba(255,215,0,0.35); display: none; align-items: center; justify-content: center; font-size: 1.4rem; transition: transform 0.15s, box-shadow 0.15s; }
   #btn-qr-flotante:active { transform: scale(0.92); }
-  /* MODAL QR */
   #modal-qr { display: none; position: fixed; inset: 0; z-index: 850; background: rgba(0,0,0,0.88); align-items: center; justify-content: center; padding: 1rem; }
   #modal-qr.visible { display: flex; }
   .qr-card { background: var(--negro2); border: 2px solid var(--amarillo); border-radius: 16px; padding: 1.5rem; text-align: center; width: 100%; max-width: 300px; animation: slideUp 0.25s ease; position: relative; }
   .qr-card-titulo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.2rem; color: var(--amarillo); margin-bottom: 1rem; }
   #qrcode { display: inline-block; padding: 0.75rem; background: white; border-radius: 8px; }
   .qr-url { font-size: 0.65rem; color: var(--gris); margin-top: 0.6rem; word-break: break-all; }
-
   @media (min-width: 480px) { .productos-grid { grid-template-columns: repeat(3, 1fr); } }
 </style>
 </head>
 <body>
 
-<!-- BIENVENIDA -->
 <div id="pantalla-inicio">
   <div class="bienvenida-bg"></div>
   <div class="bienvenida-content">
@@ -212,7 +210,13 @@
   </div>
 </div>
 
-<!-- BARRA -->
+<!-- BANNER: aparece cuando lleva mucho tiempo fuera -->
+<div id="banner-reactivacion">
+  📋 Mostrando tu última vista
+  <button onclick="actualizarCatalogo()">🔄 Actualizar</button>
+  <button onclick="ocultarBanner()" style="background:transparent;border:1px solid #555;color:#888;">✕</button>
+</div>
+
 <div id="barra-top">
   <div class="barra-inner">
     <div class="logo-barra tap-flash-barra" id="logo-barra-txt" onclick="tapLogo()" style="cursor:pointer;user-select:none;transition:opacity 0.15s;">LLAN<span>TECH</span></div>
@@ -223,7 +227,6 @@
   </div>
 </div>
 
-<!-- CATÁLOGO -->
 <div id="catalogo-section">
   <div style="padding:1rem 1rem 0">
     <div class="catalogo-titulo">🏁 CATÁLOGO</div>
@@ -233,16 +236,14 @@
     </div>
   </div>
   <div class="productos-grid" id="productos-grid" style="padding:0 1rem;"></div>
-
 </div>
 
-<!-- MODAL IMAGEN -->
 <div id="modal-imagen">
   <button class="btn-modal-cerrar" onclick="cerrarModalImagen()">✕</button>
   <div class="modal-nombre-grande" id="modal-prod-nombre">—</div>
   <div class="modal-img-container" id="swipe-container">
     <div id="modal-img-inner"></div>
-    <div class="swipe-feedback" id="swipe-feedback-el"></div>
+    <div class="swipe-feedback-m" id="swipe-feedback-el"></div>
   </div>
   <div class="swipe-indicadores">
     <div class="swipe-ind no">← NO PEDIR</div>
@@ -252,7 +253,6 @@
   <button class="btn-ver-detalles-modal" onclick="abrirDetalles()">Ver detalles</button>
 </div>
 
-<!-- MODAL DETALLES -->
 <div id="modal-detalles">
   <div class="detalles-sheet">
     <div class="detalles-handle"></div>
@@ -264,7 +264,6 @@
   </div>
 </div>
 
-<!-- MODAL CANTIDAD -->
 <div id="modal-cantidad">
   <div class="cantidad-card">
     <div class="cantidad-prod-nombre" id="cant-prod-nombre">—</div>
@@ -280,7 +279,6 @@
   </div>
 </div>
 
-<!-- DRAWER CARRITO -->
 <div id="drawer-carrito">
   <div class="carrito-sheet">
     <div class="carrito-titulo">🛒 Mi Pedido <button style="background:none;border:none;color:#888;font-size:1.3rem;cursor:pointer" onclick="cerrarCarrito()">✕</button></div>
@@ -303,7 +301,6 @@
   </div>
 </div>
 
-<!-- MODAL DATOS CLIENTE -->
 <div id="modal-datos-cliente">
   <div class="datos-sheet">
     <div class="datos-handle"></div>
@@ -319,7 +316,6 @@
   </div>
 </div>
 
-<!-- MODAL UBICACIÓN -->
 <div id="modal-ubicacion">
   <div class="ubicacion-sheet">
     <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.4rem;color:#FFD700;margin-bottom:1rem">📍 ¿Dónde recibirás tu pedido?</div>
@@ -338,12 +334,11 @@
     <div class="ub-grupo"><label class="ub-label">Notas (opcional)</label><textarea id="ub-notas" class="ub-input" style="resize:none;height:60px" placeholder="Horario preferido..."></textarea></div>
     <div style="display:flex;gap:.5rem">
       <button onclick="cerrarUbicacion()" style="flex:1;padding:.85rem;background:transparent;border:1px solid #333;color:#888;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:1rem;cursor:pointer">← Volver</button>
-      <button onclick="confirmarPedido()" style="flex:2;padding:.85rem;background:#FFD700;color:#000;border:none;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700;cursor:pointer">✅ Generar pedido</button>
+      <button onclick="confirmarPedido()" id="btn-confirmar-pedido" style="flex:2;padding:.85rem;background:#FFD700;color:#000;border:none;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700;cursor:pointer">✅ Generar pedido</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL PDF OK -->
 <div id="modal-pdf-ok">
   <div style="background:#111;border:2px solid #FFD700;border-radius:16px;padding:2rem;width:100%;max-width:360px;text-align:center">
     <div style="font-size:3rem;margin-bottom:.5rem">✅</div>
@@ -357,13 +352,11 @@
   </div>
 </div>
 
-<!-- BOTÓN FLOTANTE QR -->
 <button id="btn-qr-flotante" onclick="abrirModalQR()" title="Compartir catálogo">📲</button>
 
-<!-- MODAL QR -->
 <div id="modal-qr">
   <div class="qr-card">
-    <button class="btn-qr-cerrar" onclick="cerrarModalQR()" style="position:absolute;top:.75rem;right:.75rem;background:var(--negro3);border:1px solid #333;color:var(--blanco);width:30px;height:30px;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+    <button onclick="cerrarModalQR()" style="position:absolute;top:.75rem;right:.75rem;background:var(--negro3);border:1px solid #333;color:var(--blanco);width:30px;height:30px;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
     <div class="qr-card-titulo">📲 Compartir catálogo</div>
     <div id="qrcode"></div>
     <div class="qr-url" id="qr-url-text"></div>
@@ -377,27 +370,84 @@
 const WA_NUMERO = "4424003376";
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwwnWMDlxiaf6-MUEQcY2eD34VQi3wwVicg0b_40SHi7OT2g2Ylf7jrWDQImbqLbdb9/exec";
 
-let NEGOCIO = { nombre:"LlanTech", razonSocial:"LlanTech Servicios Automotrices S.A. de C.V.", rfc:"LSA000101AAA", direccion:"Av. Ejemplo 123, Col. Centro, CDMX", telefono:"4424003376", email:"ventas@llantech.com", web:"www.llantech.com", costoEnvio:150, ivaRate:0.16, moneda:"MXN", adminURL:"https://proyectosolaronline-ops.github.io/llantas-calidadStar/admin.html" };
+// ══════════════════════════════════════════
+// SNAPSHOT — esto es lo que resuelve el bug
+// Guarda exactamente qué se estaba mostrando
+// antes de irse a otra pantalla
+// ══════════════════════════════════════════
+const SNAP = {
+  productos: [],          // todos los productos cargados
+  listaActual: [],        // lista que estaba visible (con filtro)
+  filtroActivo: 'todos',  // filtro seleccionado
+  cargadoEnMs: 0,         // cuándo se cargó del Sheet
+  catalogoVisible: false, // si ya entró al catálogo
+};
 
-const FALLBACK = [
-  {id:1,marca:"BRIDGESTONE",medida:"205/55R16",precio:1850,stock:15,descripcion:"Alto rendimiento para sedán.",indice_carga:"91",indice_vel:"V",temporada:"Verano",img:""},
-  {id:2,marca:"MICHELIN",medida:"225/45R17",precio:2350,stock:8,descripcion:"Premium touring.",indice_carga:"94",indice_vel:"W",temporada:"All Season",img:""},
-  {id:3,marca:"CONTINENTAL",medida:"195/65R15",precio:1650,stock:20,descripcion:"Ideal para uso urbano.",indice_carga:"91",indice_vel:"H",temporada:"All Season",img:""},
-  {id:4,marca:"PIRELLI",medida:"245/40R18",precio:3200,stock:3,descripcion:"Performance extremo.",indice_carga:"97",indice_vel:"Y",temporada:"Verano",img:""},
-  {id:5,marca:"GOODYEAR",medida:"215/60R16",precio:1950,stock:12,descripcion:"Balance perfecto.",indice_carga:"95",indice_vel:"H",temporada:"All Season",img:""},
-  {id:6,marca:"DUNLOP",medida:"185/70R14",precio:1350,stock:0,descripcion:"Económica y confiable.",indice_carga:"88",indice_vel:"T",temporada:"All Season",img:""},
-];
+// Más de 10 min fuera → ofrecer actualizar (no forzar)
+const UMBRAL_ACTUALIZACION_MS = 10 * 60 * 1000;
 
-let cliente={}, productos=[], carrito=[], productoActivo=null;
+let NEGOCIO = {
+  nombre:"LlanTech", razonSocial:"LlanTech Servicios Automotrices S.A. de C.V.",
+  rfc:"LSA000101AAA", direccion:"Av. Ejemplo 123, Col. Centro, CDMX",
+  telefono:"4424003376", email:"ventas@llantech.com",
+  web:"www.llantech.com", costoEnvio:150, ivaRate:0.16, moneda:"MXN",
+  adminURL:"admin.html"
+};
+
+let cliente={}, carrito=[], productoActivo=null;
 let cantidadSeleccionada=1, ruletaIndex=0, ubicacionPedido={}, pedidoActual=null;
 
-// 3 taps → admin
+// ══════════════════════════════════════════
+// PAGE VISIBILITY — detecta regreso a pantalla
+// ══════════════════════════════════════════
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) return;           // se fue — no hacer nada
+  if (!SNAP.catalogoVisible) return;     // aún en bienvenida — no hacer nada
+
+  // Cerrar cualquier modal que pudiera quedar abierto
+  cerrarTodosLosModales();
+
+  const tiempoFuera = Date.now() - SNAP.cargadoEnMs;
+
+  if (tiempoFuera > UMBRAL_ACTUALIZACION_MS) {
+    // Llevas más de 10 min — mostrar banner de opción a actualizar
+    // pero SIEMPRE restaurar la vista anterior primero
+    renderProductos(SNAP.listaActual);
+    mostrarBanner();
+  } else {
+    // Menos de 10 min — restaurar exactamente lo que había, punto
+    renderProductos(SNAP.listaActual);
+  }
+});
+
+function cerrarTodosLosModales() {
+  ['modal-imagen','modal-detalles','modal-cantidad',
+   'drawer-carrito','modal-datos-cliente','modal-ubicacion','modal-qr']
+    .forEach(id => document.getElementById(id).classList.remove('visible'));
+  document.getElementById('modal-pdf-ok').style.display = 'none';
+  productoActivo = null;
+}
+
+function mostrarBanner() {
+  const b = document.getElementById('banner-reactivacion');
+  b.style.display = 'flex';
+}
+function ocultarBanner() {
+  document.getElementById('banner-reactivacion').style.display = 'none';
+}
+function actualizarCatalogo() {
+  ocultarBanner();
+  cargarCatalogo();
+}
+
+// ══════════════════════════════════════════
+// TAP LOGO → ADMIN
+// ══════════════════════════════════════════
 let tapCount=0, tapTimer=null;
 function tapLogo(){
-  // Flash visual en el logo que esté visible
   ['logo-tap','logo-barra-txt'].forEach(id=>{
     const el=document.getElementById(id);
-    if(!el) return;
+    if(!el)return;
     el.style.opacity='0.4';
     setTimeout(()=>el.style.opacity='',150);
   });
@@ -405,52 +455,44 @@ function tapLogo(){
   if(tapCount>=3){
     tapCount=0;
     mostrarToast('🔐 Entrando al admin...');
-    setTimeout(()=>window.location.href=NEGOCIO.adminURL, 500);
+    setTimeout(()=>window.location.href=NEGOCIO.adminURL,500);
     return;
   }
-  tapTimer=setTimeout(()=>tapCount=0, 900);
+  tapTimer=setTimeout(()=>tapCount=0,900);
 }
 
 // ══════════════════════════════════════════
-// CORRECCIÓN PRINCIPAL: entrarCatalogo
-// Muestra catálogo PRIMERO con spinner,
-// luego carga datos de forma asíncrona
+// ENTRADA AL CATÁLOGO
 // ══════════════════════════════════════════
 function entrarCatalogo(){
-  const btn = document.getElementById('btn-entrar');
-  btn.disabled = true;
-  btn.textContent = '⏳ Cargando...';
+  const btn=document.getElementById('btn-entrar');
+  btn.disabled=true; btn.textContent='⏳ Cargando...';
 
-  // 1. Ocultar bienvenida
-  document.getElementById('pantalla-inicio').style.display = 'none';
+  document.getElementById('pantalla-inicio').style.display='none';
+  document.getElementById('barra-top').style.display='block';
+  document.getElementById('catalogo-section').style.display='block';
 
-  // 2. Mostrar UI inmediatamente
-  document.getElementById('barra-top').style.display = 'block';
-  document.getElementById('catalogo-section').style.display = 'block';
-
-  // 3. Spinner mientras carga
-  document.getElementById('productos-grid').innerHTML =
+  document.getElementById('productos-grid').innerHTML=
     '<div class="spinner-wrap"><div class="spinner"></div><div class="spinner-txt">Conectando con el catálogo...</div></div>';
 
-  // 4. Cargar datos (no bloqueante)
-  cargarDatos().finally(() => {
-    btn.disabled = false;
-    btn.textContent = '🏁 Ver Catálogo';
+  SNAP.catalogoVisible = true;
+
+  Promise.allSettled([cargarConfig(), cargarCatalogo()]).finally(()=>{
+    btn.disabled=false; btn.textContent='🏁 Ver Catálogo';
     generarQR();
+    document.getElementById('btn-qr-flotante').style.display='flex';
   });
 }
 
-async function cargarDatos(){
-  // Cargar config y catálogo en paralelo
-  await Promise.allSettled([cargarConfig(), cargarCatalogo()]);
-}
-
+// ══════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════
 async function cargarConfig(){
   try{
-    const r = await fetch(APPS_SCRIPT_URL+"?accion=leerConfig&t="+Date.now());
-    const d = await r.json();
-    if(!d.ok||!d.data) return;
-    const c = d.data;
+    const r=await fetch(APPS_SCRIPT_URL+"?accion=leerConfig&t="+Date.now());
+    const d=await r.json();
+    if(!d.ok||!d.data)return;
+    const c=d.data;
     if(c.NombreNegocio) NEGOCIO.nombre=c.NombreNegocio;
     if(c.RazonSocial)   NEGOCIO.razonSocial=c.RazonSocial;
     if(c.RFC)           NEGOCIO.rfc=c.RFC;
@@ -469,53 +511,72 @@ async function cargarConfig(){
   }catch(e){}
 }
 
+// ══════════════════════════════════════════
+// CATÁLOGO — carga y guarda snapshot
+// ══════════════════════════════════════════
+const FALLBACK=[
+  {id:1,marca:"BRIDGESTONE",medida:"205/55R16",precio:1850,stock:15,descripcion:"Alto rendimiento para sedán.",indice_carga:"91",indice_vel:"V",temporada:"Verano",img:""},
+  {id:2,marca:"MICHELIN",medida:"225/45R17",precio:2350,stock:8,descripcion:"Premium touring.",indice_carga:"94",indice_vel:"W",temporada:"All Season",img:""},
+  {id:3,marca:"CONTINENTAL",medida:"195/65R15",precio:1650,stock:20,descripcion:"Ideal para uso urbano.",indice_carga:"91",indice_vel:"H",temporada:"All Season",img:""},
+  {id:4,marca:"PIRELLI",medida:"245/40R18",precio:3200,stock:3,descripcion:"Performance extremo.",indice_carga:"97",indice_vel:"Y",temporada:"Verano",img:""},
+  {id:5,marca:"GOODYEAR",medida:"215/60R16",precio:1950,stock:12,descripcion:"Balance perfecto.",indice_carga:"95",indice_vel:"H",temporada:"All Season",img:""},
+  {id:6,marca:"DUNLOP",medida:"185/70R14",precio:1350,stock:0,descripcion:"Económica y confiable.",indice_carga:"88",indice_vel:"T",temporada:"All Season",img:""},
+];
+
 async function cargarCatalogo(){
-  let usandoFallback = false;
+  let usandoFallback=false;
   try{
-    const r = await fetch(APPS_SCRIPT_URL+"?accion=leerCatalogo&t="+Date.now());
-    const d = await r.json();
-    if(d.ok && d.data && d.data.length > 0){
-      productos = d.data
-        .filter(p => p.Activo !== 'FALSE' && p.Activo !== false && p.Marca)
+    const r=await fetch(APPS_SCRIPT_URL+"?accion=leerTodo&t="+Date.now());
+    const d=await r.json();
+    const raw=d.catalogo||d.data||[];
+    if(d.ok && raw.length>0){
+      SNAP.productos=raw
+        .filter(p=>p.Activo!=='FALSE'&&p.Activo!==false&&p.Marca)
         .map((p,i)=>({
-          id: i+1,
-          marca: p.Marca||'',
-          medida: p.Medida||'',
-          precio: parseFloat(p.Precio)||0,
-          stock: parseInt(p.Stock)||0,
-          descripcion: p.Descripcion||'',
-          img: p.ImagenURL||'',
-          indice_carga: p.IndiceCarga||'',
-          indice_vel: p.IndiceVelocidad||'',
-          temporada: p.Temporada||'',
+          id:i+1, marca:p.Marca||'', medida:p.Medida||'',
+          precio:parseFloat(p.Precio)||0, stock:parseInt(p.Stock)||0,
+          descripcion:p.Descripcion||'',
+          img:p.ImagenURL||'',   // base64 o URL — se trata igual
+          indice_carga:p.IndiceCarga||'', indice_vel:p.IndiceVelocidad||'',
+          temporada:p.Temporada||'',
         }));
-    } else {
-      throw new Error('vacío');
-    }
+    } else throw new Error('vacío');
   }catch(e){
-    productos = FALLBACK;
-    usandoFallback = true;
+    SNAP.productos=FALLBACK;
+    usandoFallback=true;
   }
 
-  // ← SIEMPRE renderiza aquí, dentro del try/catch
-  renderProductos(productos);
-  renderFiltros();
-  document.getElementById('catalogo-sub').textContent =
-    productos.length + ' productos' + (usandoFallback ? ' (modo local)' : ' disponibles');
+  // Guardar momento de carga
+  SNAP.cargadoEnMs = Date.now();
 
-  if(usandoFallback) mostrarToast('⚠️ Sin conexión al servidor — mostrando catálogo local');
+  // Aplicar filtro que estaba activo
+  const lista = SNAP.filtroActivo==='todos'
+    ? SNAP.productos
+    : SNAP.productos.filter(p=>p.marca===SNAP.filtroActivo);
+
+  // Guardar lista visible en el snapshot
+  SNAP.listaActual = lista;
+
+  renderFiltros();
+  renderProductos(lista);
+
+  document.getElementById('catalogo-sub').textContent=
+    SNAP.productos.length+' productos'+(usandoFallback?' (modo local)':' disponibles');
+
+  if(usandoFallback) mostrarToast('⚠️ Sin conexión — catálogo local');
 }
 
 // ══════════════════════════════════════════
 // RENDER
 // ══════════════════════════════════════════
 function renderFiltros(){
-  const marcas = [...new Set(productos.map(p=>p.marca))];
-  const wrap = document.getElementById('filtros-wrap');
-  wrap.innerHTML = '<button class="filtro-btn active" onclick="filtrar(\'todos\',this)">Todos</button>';
+  const marcas=[...new Set(SNAP.productos.map(p=>p.marca))];
+  const wrap=document.getElementById('filtros-wrap');
+  wrap.innerHTML='<button class="filtro-btn'+(SNAP.filtroActivo==='todos'?' active':'')+'" onclick="filtrar(\'todos\',this)">Todos</button>';
   marcas.forEach(m=>{
     const b=document.createElement('button');
-    b.className='filtro-btn'; b.textContent=m;
+    b.className='filtro-btn'+(SNAP.filtroActivo===m?' active':'');
+    b.textContent=m;
     b.onclick=()=>filtrar(m,b);
     wrap.appendChild(b);
   });
@@ -524,37 +585,39 @@ function renderFiltros(){
 function filtrar(val,btn){
   document.querySelectorAll('.filtro-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  renderProductos(val==='todos'?productos:productos.filter(p=>p.marca===val));
+  SNAP.filtroActivo=val;
+  const lista=val==='todos'?SNAP.productos:SNAP.productos.filter(p=>p.marca===val);
+  SNAP.listaActual=lista;   // actualizar snapshot con el nuevo filtro
+  renderProductos(lista);
 }
 
-function tarjetaImagen(p){
-  if(p.img){
-    return `
-      <img src="${p.img}" alt="${p.marca}" loading="lazy"
-        style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;"
-        onerror="this.style.display='none'">
-      <div class="img-fallback">🏎️<small>${p.marca}</small></div>`;
-  }
-  return `<div class="img-fallback">🏎️<small>${p.marca}</small></div>`;
+function imgHTML(p){
+  if(!p.img) return `<div class="img-fallback">🏎️<small>${p.marca}</small></div>`;
+  // Fallback visible por default; imagen real se superpone cuando carga
+  return `
+    <div class="img-fallback">🏎️<small>${p.marca}</small></div>
+    <img class="img-real" src="${p.img}" alt="${p.marca}"
+      onload="this.classList.add('ok')"
+      onerror="this.remove()">`;
 }
 
 function renderProductos(lista){
-  const grid = document.getElementById('productos-grid');
-  grid.innerHTML = '';
+  const grid=document.getElementById('productos-grid');
+  grid.innerHTML='';
   if(!lista||lista.length===0){
     grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--gris)">🏁 No hay productos disponibles</div>';
     return;
   }
   lista.forEach(p=>{
-    const agotado = p.stock===0;
-    const sc = p.stock===0?'agotado':p.stock<5?'bajo':'';
-    const sl = p.stock===0?'Agotado':p.stock<5?`Solo ${p.stock}`:`Stock: ${p.stock}`;
-    const c = document.createElement('div');
+    const agotado=p.stock===0;
+    const sc=p.stock===0?'agotado':p.stock<5?'bajo':'';
+    const sl=p.stock===0?'Agotado':p.stock<5?`Solo ${p.stock}`:`Stock: ${p.stock}`;
+    const c=document.createElement('div');
     c.className='producto-card'+(agotado?' agotado':'');
     c.innerHTML=`
       <div class="prod-img-wrap" ${!agotado?`onclick="abrirImagen(${p.id})"`:''}
-           style="position:relative;aspect-ratio:1;background:#111;cursor:${agotado?'default':'pointer'}">
-        ${tarjetaImagen(p)}
+           style="cursor:${agotado?'default':'pointer'}">
+        ${imgHTML(p)}
         <span class="stock-badge ${sc}">${sl}</span>
         ${!agotado?'<div class="hint-swipe">← No / Sí →</div>':''}
         <div class="swipe-feedback" id="sf-${p.id}"></div>
@@ -572,16 +635,19 @@ function renderProductos(lista){
 // ══════════════════════════════════════════
 // MODAL IMAGEN + SWIPE
 // ══════════════════════════════════════════
-let swipeStartX=0, swipeDeltaX=0, swipeActive=false;
+let swipeStartX=0,swipeDeltaX=0,swipeActive=false;
 
 function abrirImagen(id){
-  productoActivo = productos.find(p=>p.id===id);
-  if(!productoActivo) return;
-  const inner = document.getElementById('modal-img-inner');
+  productoActivo=SNAP.productos.find(p=>p.id===id);
+  if(!productoActivo)return;
+  const inner=document.getElementById('modal-img-inner');
   if(productoActivo.img){
-    inner.innerHTML=`<img src="${productoActivo.img}" alt="${productoActivo.marca}"
-      style="width:100%;border-radius:12px;box-shadow:0 0 40px rgba(255,215,0,0.15);display:block;"
-      onerror="this.outerHTML='<div class=\\'modal-img-ph\\'>🏎️<span>${productoActivo.marca} ${productoActivo.medida}</span></div>'">`;
+    inner.innerHTML=`
+      <div class="modal-img-ph" id="modal-ph-tmp">🏎️<span>${productoActivo.marca} ${productoActivo.medida}</span></div>
+      <img style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;border-radius:12px;opacity:0;transition:opacity .3s;z-index:2"
+        src="${productoActivo.img}" alt="${productoActivo.marca}"
+        onload="this.style.opacity='1';document.getElementById('modal-ph-tmp').style.display='none'"
+        onerror="this.remove()">`;
   } else {
     inner.innerHTML=`<div class="modal-img-ph">🏎️<span>${productoActivo.marca} ${productoActivo.medida}</span></div>`;
   }
@@ -595,44 +661,35 @@ function cerrarModalImagen(){ document.getElementById('modal-imagen').classList.
 function iniciarSwipe(){
   const cont=document.getElementById('swipe-container');
   const fb=document.getElementById('swipe-feedback-el');
-  cont.ontouchstart=e=>{swipeStartX=e.touches[0].clientX;swipeActive=true;};
-  cont.ontouchmove=e=>{
+  cont.style.transform='';
+  const s=(x)=>{swipeStartX=x;swipeActive=true;};
+  const m=(x)=>{
     if(!swipeActive)return;
-    swipeDeltaX=e.touches[0].clientX-swipeStartX;
+    swipeDeltaX=x-swipeStartX;
     cont.style.transform=`translateX(${swipeDeltaX*.4}px) rotate(${swipeDeltaX*.03}deg)`;
-    fb.className='swipe-feedback';
-    if(swipeDeltaX>30) fb.classList.add('si-show');
-    else if(swipeDeltaX<-30) fb.classList.add('no-show');
+    fb.className='swipe-feedback-m';
+    if(swipeDeltaX>30)fb.classList.add('si-show');
+    else if(swipeDeltaX<-30)fb.classList.add('no-show');
   };
-  cont.ontouchend=()=>{
-    swipeActive=false; cont.style.transform=''; fb.className='swipe-feedback';
+  const e=()=>{
+    swipeActive=false; cont.style.transform=''; fb.className='swipe-feedback-m';
     const snap=productoActivo;
     if(swipeDeltaX>60){cerrarModalImagen();setTimeout(()=>abrirRuleta(snap),200);}
     else if(swipeDeltaX<-60){cerrarModalImagen();mostrarToast("❌ Producto descartado");}
     swipeDeltaX=0;
   };
-  cont.onmousedown=e=>{swipeStartX=e.clientX;swipeActive=true;};
-  cont.onmousemove=e=>{
-    if(!swipeActive)return;
-    swipeDeltaX=e.clientX-swipeStartX;
-    cont.style.transform=`translateX(${swipeDeltaX*.4}px) rotate(${swipeDeltaX*.03}deg)`;
-    fb.className='swipe-feedback';
-    if(swipeDeltaX>30) fb.classList.add('si-show');
-    else if(swipeDeltaX<-30) fb.classList.add('no-show');
-  };
-  cont.onmouseup=()=>{
-    swipeActive=false; cont.style.transform=''; fb.className='swipe-feedback';
-    const snap=productoActivo;
-    if(swipeDeltaX>80){cerrarModalImagen();setTimeout(()=>abrirRuleta(snap),200);}
-    else if(swipeDeltaX<-80){cerrarModalImagen();mostrarToast("❌ Producto descartado");}
-    swipeDeltaX=0;
-  };
+  cont.ontouchstart=ev=>s(ev.touches[0].clientX);
+  cont.ontouchmove=ev=>m(ev.touches[0].clientX);
+  cont.ontouchend=e;
+  cont.onmousedown=ev=>s(ev.clientX);
+  cont.onmousemove=ev=>m(ev.clientX);
+  cont.onmouseup=e;
 }
 
 // ══════════════════════════════════════════
 // DETALLES
 // ══════════════════════════════════════════
-function abrirDetallesDirecto(id){ productoActivo=productos.find(p=>p.id===id); abrirDetalles(); }
+function abrirDetallesDirecto(id){ productoActivo=SNAP.productos.find(p=>p.id===id); abrirDetalles(); }
 function abrirDetalles(){
   if(!productoActivo)return;
   const p=productoActivo;
@@ -648,7 +705,7 @@ function abrirDetalles(){
   document.getElementById('modal-imagen').classList.remove('visible');
   document.getElementById('modal-detalles').classList.add('visible');
 }
-function cerrarDetalles(){ document.getElementById('modal-detalles').classList.remove('visible'); if(productoActivo) abrirImagen(productoActivo.id); }
+function cerrarDetalles(){ document.getElementById('modal-detalles').classList.remove('visible'); if(productoActivo)abrirImagen(productoActivo.id); }
 function iniciarAgregarDesdeDetalles(){ document.getElementById('modal-detalles').classList.remove('visible'); abrirRuleta(productoActivo); }
 
 // ══════════════════════════════════════════
@@ -671,10 +728,7 @@ function abrirRuleta(prod){
   lista.ontouchstart=e=>{sy=e.touches[0].clientY;};
   lista.ontouchmove=e=>{
     const dy=sy-e.touches[0].clientY;
-    if(Math.abs(dy)>15){
-      ruletaIndex=Math.max(0,Math.min(lista.children.length-1,ruletaIndex+(dy>0?1:-1)));
-      actualizarRuleta(ruletaIndex); sy=e.touches[0].clientY;
-    }
+    if(Math.abs(dy)>15){ ruletaIndex=Math.max(0,Math.min(lista.children.length-1,ruletaIndex+(dy>0?1:-1))); actualizarRuleta(ruletaIndex); sy=e.touches[0].clientY; }
   };
   document.getElementById('ruleta-wrap').onwheel=e=>{
     e.preventDefault();
@@ -693,7 +747,7 @@ function actualizarRuleta(idx){
 function confirmarCantidad(){
   if(!productoActivo)return;
   const e=carrito.find(c=>c.id===productoActivo.id);
-  if(e){e.cantidad+=cantidadSeleccionada;}else{carrito.push({...productoActivo,cantidad:cantidadSeleccionada});}
+  if(e)e.cantidad+=cantidadSeleccionada; else carrito.push({...productoActivo,cantidad:cantidadSeleccionada});
   document.getElementById('modal-cantidad').classList.remove('visible');
   actualizarBarraCarrito();
   mostrarToast(`✅ ${productoActivo.marca} x${cantidadSeleccionada} agregado`);
@@ -704,33 +758,17 @@ function cancelarCantidad(){ document.getElementById('modal-cantidad').classList
 // ══════════════════════════════════════════
 // CARRITO
 // ══════════════════════════════════════════
-function calcularTotales(){
-  const sub=carrito.reduce((s,c)=>s+(c.precio*c.cantidad),0);
-  const iva=sub*NEGOCIO.ivaRate, env=carrito.length>0?NEGOCIO.costoEnvio:0;
-  return{subtotalProd:sub,iva,envio:env,total:sub+iva+env};
-}
-function actualizarBarraCarrito(){
-  const{total}=calcularTotales();
-  const cant=carrito.reduce((s,c)=>s+c.cantidad,0);
-  document.getElementById('badge-cant').textContent=cant;
-  document.getElementById('barra-total').textContent=`$${total.toLocaleString('es-MX')}`;
-}
+function calcularTotales(){ const sub=carrito.reduce((s,c)=>s+(c.precio*c.cantidad),0); const iva=sub*NEGOCIO.ivaRate,env=carrito.length>0?NEGOCIO.costoEnvio:0; return{subtotalProd:sub,iva,envio:env,total:sub+iva+env}; }
+function actualizarBarraCarrito(){ const{total}=calcularTotales(); const cant=carrito.reduce((s,c)=>s+c.cantidad,0); document.getElementById('badge-cant').textContent=cant; document.getElementById('barra-total').textContent='$'+total.toLocaleString('es-MX'); }
 function abrirCarrito(){
   const lista=document.getElementById('carrito-items-list');
-  if(carrito.length===0){
-    lista.innerHTML='<div class="carrito-vacio"><span class="emoji">🛒</span>Tu carrito está vacío<br><small>Desliza a la derecha en una imagen para agregar</small></div>';
-    document.getElementById('resumen-fiscal').style.display='none';
-  } else {
+  if(carrito.length===0){ lista.innerHTML='<div class="carrito-vacio"><span class="emoji">🛒</span>Tu carrito está vacío<br><small>Desliza a la derecha en una imagen para agregar</small></div>'; document.getElementById('resumen-fiscal').style.display='none'; }
+  else{
     lista.innerHTML='';
     carrito.forEach(item=>{
       const d=document.createElement('div'); d.className='carrito-item';
-      d.innerHTML=`
-        <div class="ci-icon">🏎️</div>
-        <div class="ci-info">
-          <div class="ci-nombre">${item.marca}</div>
-          <div class="ci-medida">${item.medida}</div>
-          <div class="ci-precio">$${(item.precio*item.cantidad).toLocaleString('es-MX')}</div>
-        </div>
+      d.innerHTML=`<div class="ci-icon">🏎️</div>
+        <div class="ci-info"><div class="ci-nombre">${item.marca}</div><div class="ci-medida">${item.medida}</div><div class="ci-precio">$${(item.precio*item.cantidad).toLocaleString('es-MX')}</div></div>
         <div class="ci-cant-ctrl">
           <button class="ci-cant-btn" onclick="cambiarCant(${item.id},-1)">−</button>
           <span class="ci-cant-num">${item.cantidad}</span>
@@ -744,7 +782,7 @@ function abrirCarrito(){
     document.getElementById('r-subtotal').textContent=fmt(subtotalProd);
     document.getElementById('r-iva').textContent=fmt(iva);
     document.getElementById('r-envio').textContent=fmt(envio);
-    document.getElementById('r-envio-lbl').textContent=`Envío (${NEGOCIO.moneda})`;
+    document.getElementById('r-envio-lbl').textContent='Envío ('+NEGOCIO.moneda+')';
     document.getElementById('r-total').textContent=fmt(total);
     document.getElementById('resumen-fiscal').style.display='block';
   }
@@ -757,68 +795,36 @@ function eliminarItem(id){ carrito=carrito.filter(c=>c.id!==id); actualizarBarra
 // ══════════════════════════════════════════
 // FLUJO PEDIDO
 // ══════════════════════════════════════════
-function iniciarFlujoEnvio(){ if(carrito.length===0){mostrarToast("⚠️ Carrito vacío");return;} cerrarCarrito(); if(cliente.nombre&&cliente.tel) abrirUbicacion(); else abrirDatosCliente(); }
-function abrirDatosCliente(){ if(cliente.nombre) document.getElementById('inp-nombre').value=cliente.nombre; if(cliente.tel) document.getElementById('inp-tel').value=cliente.tel; if(cliente.email) document.getElementById('inp-email').value=cliente.email; document.getElementById('modal-datos-cliente').classList.add('visible'); }
+function iniciarFlujoEnvio(){ if(carrito.length===0){mostrarToast("⚠️ Carrito vacío");return;} cerrarCarrito(); if(cliente.nombre&&cliente.tel)abrirUbicacion(); else abrirDatosCliente(); }
+function abrirDatosCliente(){ if(cliente.nombre)document.getElementById('inp-nombre').value=cliente.nombre; if(cliente.tel)document.getElementById('inp-tel').value=cliente.tel; if(cliente.email)document.getElementById('inp-email').value=cliente.email; document.getElementById('modal-datos-cliente').classList.add('visible'); }
 function cerrarDatosCliente(){ document.getElementById('modal-datos-cliente').classList.remove('visible'); abrirCarrito(); }
 function confirmarDatosCliente(){
-  const n=document.getElementById('inp-nombre').value.trim(), t=document.getElementById('inp-tel').value.trim(), e=document.getElementById('inp-email').value.trim();
+  const n=document.getElementById('inp-nombre').value.trim(),t=document.getElementById('inp-tel').value.trim(),e=document.getElementById('inp-email').value.trim();
   if(!n||!t){mostrarToast("⚠️ Nombre y teléfono requeridos");return;}
   cliente={nombre:n,tel:t,email:e};
   document.getElementById('modal-datos-cliente').classList.remove('visible'); abrirUbicacion();
 }
 function abrirUbicacion(){ ['ub-calle','ub-ciudad','ub-cp','ub-ref','ub-notas'].forEach(id=>document.getElementById(id).value=''); document.getElementById('modal-ubicacion').classList.add('visible'); }
 function cerrarUbicacion(){ document.getElementById('modal-ubicacion').classList.remove('visible'); abrirDatosCliente(); }
-function buscarEnMapa(){ const q=encodeURIComponent([document.getElementById('ub-calle').value,document.getElementById('ub-ciudad').value,document.getElementById('ub-cp').value].filter(Boolean).join(', ')); if(!q){mostrarToast("⚠️ Escribe una dirección");return;} window.open(`https://maps.google.com/?q=${q}`,'_blank'); }
+function buscarEnMapa(){ const q=encodeURIComponent([document.getElementById('ub-calle').value,document.getElementById('ub-ciudad').value,document.getElementById('ub-cp').value].filter(Boolean).join(', ')); if(!q){mostrarToast("⚠️ Escribe una dirección");return;} window.open('https://maps.google.com/?q='+q,'_blank'); }
 async function confirmarPedido(){
   const calle=document.getElementById('ub-calle').value.trim();
   if(!calle){mostrarToast("⚠️ Escribe calle y número");return;}
-
-  // Bloquear botón mientras guarda
-  const btnGen=document.querySelector('#modal-ubicacion button:last-child');
-  if(btnGen){btnGen.disabled=true;btnGen.textContent='⏳ Guardando...';}
-
-  ubicacionPedido={
-    calle,
-    ciudad:document.getElementById('ub-ciudad').value.trim(),
-    cp:document.getElementById('ub-cp').value.trim(),
-    ref:document.getElementById('ub-ref').value.trim(),
-    notas:document.getElementById('ub-notas').value.trim()
-  };
+  const btn=document.getElementById('btn-confirmar-pedido');
+  btn.disabled=true; btn.textContent='⏳ Guardando...';
+  ubicacionPedido={calle,ciudad:document.getElementById('ub-ciudad').value.trim(),cp:document.getElementById('ub-cp').value.trim(),ref:document.getElementById('ub-ref').value.trim(),notas:document.getElementById('ub-notas').value.trim()};
   ubicacionPedido.completa=[ubicacionPedido.calle,ubicacionPedido.ciudad,ubicacionPedido.cp,ubicacionPedido.ref].filter(Boolean).join(', ');
-
   const folio='PED-'+Date.now().toString().slice(-8);
   const totales=calcularTotales();
   pedidoActual={folio,cliente,carrito:[...carrito],ubicacion:ubicacionPedido,totales,fecha:new Date().toLocaleString('es-MX'),negocio:{...NEGOCIO}};
-
-  // Guardar en Sheets con estado "en_proceso"
   let guardadoOk=false;
   try{
-    const res=await fetch(APPS_SCRIPT_URL,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        accion:'guardarPedido',
-        payload:{
-          ClienteNombre:cliente.nombre,
-          Telefono:cliente.tel,
-          Email:cliente.email,
-          Direccion:ubicacionPedido.completa,
-          Productos:carrito.map(i=>`${i.marca} ${i.medida} x${i.cantidad}`).join(', '),
-          Total:totales.total,
-          Estado:'en_proceso',
-          Notas:ubicacionPedido.notas
-        }
-      })
-    });
-    const d=await res.json();
-    guardadoOk=d.ok;
-    if(d.ID) pedidoActual.folioServidor=d.ID;
+    const res=await fetch(APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({accion:'guardarPedido',payload:{ClienteNombre:cliente.nombre,Telefono:cliente.tel,Email:cliente.email,Direccion:ubicacionPedido.completa,Productos:carrito.map(i=>`${i.marca} ${i.medida} x${i.cantidad}`).join(', '),Total:totales.total,Estado:'en_proceso',Notas:ubicacionPedido.notas}})});
+    const d=await res.json(); guardadoOk=d.ok; if(d.ID)pedidoActual.folioServidor=d.ID;
   }catch(e){}
-
-  if(btnGen){btnGen.disabled=false;btnGen.textContent='✅ Generar pedido';}
+  btn.disabled=false; btn.textContent='✅ Generar pedido';
   document.getElementById('modal-ubicacion').classList.remove('visible');
-  document.getElementById('pdf-folio-txt').textContent=
-    `Folio: ${pedidoActual.folioServidor||folio}${guardadoOk?' · ✅ Registrado en sistema':' · ⚠️ Sin conexión al servidor'}`;
+  document.getElementById('pdf-folio-txt').textContent=`Folio: ${pedidoActual.folioServidor||folio}${guardadoOk?' · ✅ Registrado':' · ⚠️ Sin conexión'}`;
   document.getElementById('modal-pdf-ok').style.display='flex';
 }
 function cerrarModalPDF(){ document.getElementById('modal-pdf-ok').style.display='none'; carrito=[]; actualizarBarraCarrito(); mostrarToast("✅ ¡Listo!"); }
@@ -828,14 +834,14 @@ function cerrarModalPDF(){ document.getElementById('modal-pdf-ok').style.display
 // ══════════════════════════════════════════
 async function descargarPDFCliente(){
   if(!pedidoActual&&carrito.length===0){mostrarToast("⚠️ No hay pedido");return;}
-  if(!pedidoActual) pedidoActual={folio:'PED-'+Date.now().toString().slice(-8),cliente,carrito:[...carrito],ubicacion:{completa:'Sin especificar'},totales:calcularTotales(),fecha:new Date().toLocaleString('es-MX'),negocio:{...NEGOCIO}};
+  if(!pedidoActual)pedidoActual={folio:'PED-'+Date.now().toString().slice(-8),cliente,carrito:[...carrito],ubicacion:{completa:'Sin especificar'},totales:calcularTotales(),fecha:new Date().toLocaleString('es-MX'),negocio:{...NEGOCIO}};
   generarPDF(pedidoActual);
 }
 function generarPDF(p){
-  const{jsPDF}=window.jspdf, doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const{jsPDF}=window.jspdf,doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
   const W=210,M=14,n=[10,10,10],a=[255,215,0],g=[120,120,120],g3=[240,240,240];
   const fmt=v=>'$'+Number(v).toLocaleString('es-MX',{minimumFractionDigits:2});
-  const neg=p.negocio; let y=0;
+  const neg=p.negocio;let y=0;
   doc.setFillColor(...n);doc.rect(0,0,W,42,'F');doc.setFillColor(...a);doc.rect(0,0,4,42,'F');
   doc.setTextColor(...a);doc.setFont('helvetica','bold');doc.setFontSize(22);doc.text(neg.nombre.toUpperCase(),M+2,16);
   doc.setTextColor(200,200,200);doc.setFont('helvetica','normal');doc.setFontSize(7.5);
@@ -864,50 +870,35 @@ function generarPDF(p){
   });
   y+=4;const rx=W-M-70,rw=70;
   const{subtotalProd,iva,envio,total}=p.totales;
-  [[`Subtotal`,subtotalProd],[`IVA ${NEGOCIO.ivaRate*100}%`,iva],[`Envío`,envio],['TOTAL',total,true]].forEach(([l,v,b])=>{
+  [['Subtotal',subtotalProd],['IVA '+(NEGOCIO.ivaRate*100)+'%',iva],['Envío',envio],['TOTAL',total,true]].forEach(([l,v,b])=>{
     if(b)doc.setFillColor(...n);else doc.setFillColor(253,253,253);
     doc.rect(rx,y,rw,7,'F');doc.setDrawColor(220,220,220);doc.line(rx,y+7,rx+rw,y+7);
     doc.setFont('helvetica',b?'bold':'normal');doc.setFontSize(b?9:8);doc.setTextColor(...(b?a:n));
     doc.text(l,rx+3,y+5);doc.text(fmt(v),rx+rw-3,y+5,{align:'right'});y+=7;
   });
-  doc.save(`Pedido-${p.folio}.pdf`);
-  mostrarToast(`📄 ${p.folio} descargado`);
+  doc.save('Pedido-'+p.folio+'.pdf');
+  mostrarToast('📄 '+p.folio+' descargado');
 }
 
 function enviarPorWhatsApp(){
   if(!pedidoActual){mostrarToast("⚠️ Genera el pedido primero");return;}
   const p=pedidoActual,fmt=v=>'$'+Number(v).toLocaleString('es-MX',{minimumFractionDigits:2});
-  const{subtotalProd,iva,envio,total}=p.totales;
+  const{total}=p.totales;
   let msg=`🏁 *PEDIDO — ${NEGOCIO.nombre}*\n📋 Folio: ${p.folio}\n\n👤 ${p.cliente.nombre} | ${p.cliente.tel}\n📍 ${p.ubicacion.completa}\n\n🛒 PRODUCTOS\n`;
   p.carrito.forEach(i=>{msg+=`• ${i.marca} ${i.medida} x${i.cantidad} = ${fmt(i.precio*i.cantidad)}\n`;});
   msg+=`\n💰 TOTAL: ${fmt(total)}`;
-  window.open(`https://wa.me/${NEGOCIO.telefono.replace(/\D/g,'')||WA_NUMERO}?text=${encodeURIComponent(msg)}`,'_blank');
+  window.open('https://wa.me/'+(NEGOCIO.telefono.replace(/\D/g,'')||WA_NUMERO)+'?text='+encodeURIComponent(msg),'_blank');
 }
 
-function generarQR(){
-  const url=window.location.href;
-  document.getElementById('qr-url-text').textContent=url;
-  document.getElementById('wa-share-link').href=`https://wa.me/?text=${encodeURIComponent('¡Mira el catálogo! '+url)}`;
-  const el=document.getElementById('qrcode'); el.innerHTML='';
-  new QRCode(el,{text:url,width:130,height:130,colorDark:"#000",colorLight:"#fff"});
-  // Mostrar botón flotante
-  const btn=document.getElementById('btn-qr-flotante');
-  btn.style.display='flex';
-}
+function generarQR(){ const url=window.location.href; document.getElementById('qr-url-text').textContent=url; document.getElementById('wa-share-link').href='https://wa.me/?text='+encodeURIComponent('¡Mira el catálogo! '+url); const el=document.getElementById('qrcode'); el.innerHTML=''; new QRCode(el,{text:url,width:130,height:130,colorDark:"#000",colorLight:"#fff"}); document.getElementById('btn-qr-flotante').style.display='flex'; }
 function abrirModalQR(){ document.getElementById('modal-qr').classList.add('visible'); }
 function cerrarModalQR(){ document.getElementById('modal-qr').classList.remove('visible'); }
-
 function mostrarToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2500); }
 
-// Backdrop
 ['modal-detalles','drawer-carrito','modal-cantidad','modal-datos-cliente','modal-ubicacion'].forEach(id=>{
   const el=document.getElementById(id);
-  const fn={
-    'modal-detalles':cerrarDetalles,'drawer-carrito':cerrarCarrito,
-    'modal-cantidad':cancelarCantidad,'modal-datos-cliente':cerrarDatosCliente,
-    'modal-ubicacion':cerrarUbicacion
-  };
-  el.addEventListener('click',e=>{if(e.target===el)(fn[id]||cerrarCarrito)();});
+  const fn={'modal-detalles':cerrarDetalles,'drawer-carrito':cerrarCarrito,'modal-cantidad':cancelarCantidad,'modal-datos-cliente':cerrarDatosCliente,'modal-ubicacion':cerrarUbicacion};
+  el.addEventListener('click',e=>{if(e.target===el)(fn[id])();});
 });
 document.getElementById('modal-pdf-ok').addEventListener('click',e=>{if(e.target===document.getElementById('modal-pdf-ok'))cerrarModalPDF();});
 document.getElementById('modal-qr').addEventListener('click',function(e){if(e.target===this)cerrarModalQR();});
