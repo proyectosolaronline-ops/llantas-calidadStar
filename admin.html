@@ -1212,20 +1212,16 @@ async function enviarSheet(payload) {
     if (payloadLimpio.payload?.ImagenURL?.startsWith('data:')) {
       payloadLimpio.payload = { ...payloadLimpio.payload, ImagenURL: '' };
     }
-
     const encoded = encodeURIComponent(JSON.stringify(payloadLimpio));
-    console.log('📤 Enviando:', JSON.stringify(payloadLimpio));
-    console.log('📏 Largo URL:', encoded.length);
-
     const res = await fetch(APPS_URL + '?data=' + encoded, {
-      redirect: 'follow'
+      redirect: 'follow',
+      headers: { 'Accept': 'application/json' }
     });
-
-    console.log('📥 Status:', res.status, res.url);
     const text = await res.text();
-    console.log('📥 Respuesta:', text);
-
-    const data = JSON.parse(text);
+    // Buscar JSON dentro de la respuesta aunque venga con HTML extra
+    const match = text.match(/\{.*\}/s);
+    if (!match) throw new Error('Sin respuesta JSON');
+    const data = JSON.parse(match[0]);
     if (!data.ok) throw new Error(data.error);
     setSyncState('ok', 'Guardado ✓');
     toast("✅ " + data.mensaje, "ok");
@@ -1233,12 +1229,10 @@ async function enviarSheet(payload) {
     return data;
   } catch (e) {
     setSyncState('error', 'Error al guardar');
-    console.error('❌ Error enviarSheet:', e);
-    toast("❌ " + (e.message || 'Error de conexión'), "err");
+    toast("❌ " + e.message, "err");
     return null;
   }
 }
-
   function setSyncState(s, t) {
   document.getElementById('sdot').className = 'sdot ' + s;
   document.getElementById('stxt').textContent = t;
