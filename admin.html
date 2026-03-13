@@ -1205,23 +1205,22 @@ async function sincronizar() {
     setSyncState('ok', 'Modo demo');
   }
 }
-async function enviarSheet(payload) {
+
+  async function enviarSheet(payload) {
   setSyncState('syncing', 'Guardando…');
   try {
+    // Limpiar base64 grande de imagen
     const payloadLimpio = { ...payload };
     if (payloadLimpio.payload?.ImagenURL?.startsWith('data:')) {
       payloadLimpio.payload = { ...payloadLimpio.payload, ImagenURL: '' };
     }
-    const encoded = encodeURIComponent(JSON.stringify(payloadLimpio));
-    const res = await fetch(APPS_URL + '?data=' + encoded, {
-      redirect: 'follow',
-      headers: { 'Accept': 'application/json' }
-    });
-    const text = await res.text();
-    // Buscar JSON dentro de la respuesta aunque venga con HTML extra
-    const match = text.match(/\{.*\}/s);
-    if (!match) throw new Error('Sin respuesta JSON');
-    const data = JSON.parse(match[0]);
+
+    // FormData evita preflight CORS — igual que el otro proyecto
+    const fd = new FormData();
+    fd.append('data', JSON.stringify(payloadLimpio));
+
+    const res = await fetch(APPS_URL, { method: 'POST', body: fd });
+    const data = await res.json();
     if (!data.ok) throw new Error(data.error);
     setSyncState('ok', 'Guardado ✓');
     toast("✅ " + data.mensaje, "ok");
@@ -1233,6 +1232,8 @@ async function enviarSheet(payload) {
     return null;
   }
 }
+  
+  
   function setSyncState(s, t) {
   document.getElementById('sdot').className = 'sdot ' + s;
   document.getElementById('stxt').textContent = t;
