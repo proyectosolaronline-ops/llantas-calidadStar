@@ -1211,8 +1211,8 @@ async function enviarSheet(payload) {
   try {
     const res = await fetch(APPS_URL, {
       method: 'POST',
-      body: JSON.stringify(payload),
-      headers: { 'Content-Type': 'application/json' }
+      redirect: 'follow',
+      body: new Blob([JSON.stringify(payload)], { type: 'text/plain' })
     });
     const data = await res.json();
     if (!data.ok) throw new Error(data.error);
@@ -1227,6 +1227,8 @@ async function enviarSheet(payload) {
   }
 }
 
+
+  
 function setSyncState(s, t) {
   document.getElementById('sdot').className = 'sdot ' + s;
   document.getElementById('stxt').textContent = t;
