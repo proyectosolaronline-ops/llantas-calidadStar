@@ -1206,15 +1206,28 @@ async function sincronizar() {
   }
 }
 
-async function enviarSheet(payload) {
+
+  async function enviarSheet(payload) {
   setSyncState('syncing', 'Guardando…');
   try {
-    const res = await fetch(APPS_URL, {
-      method: 'POST',
-      redirect: 'follow',
-      body: new Blob([JSON.stringify(payload)], { type: 'text/plain' })
+    const payloadLimpio = { ...payload };
+    if (payloadLimpio.payload?.ImagenURL?.startsWith('data:')) {
+      payloadLimpio.payload = { ...payloadLimpio.payload, ImagenURL: '' };
+    }
+
+    const encoded = encodeURIComponent(JSON.stringify(payloadLimpio));
+    console.log('📤 Enviando:', JSON.stringify(payloadLimpio));
+    console.log('📏 Largo URL:', encoded.length);
+
+    const res = await fetch(APPS_URL + '?data=' + encoded, {
+      redirect: 'follow'
     });
-    const data = await res.json();
+
+    console.log('📥 Status:', res.status, res.url);
+    const text = await res.text();
+    console.log('📥 Respuesta:', text);
+
+    const data = JSON.parse(text);
     if (!data.ok) throw new Error(data.error);
     setSyncState('ok', 'Guardado ✓');
     toast("✅ " + data.mensaje, "ok");
@@ -1222,13 +1235,11 @@ async function enviarSheet(payload) {
     return data;
   } catch (e) {
     setSyncState('error', 'Error al guardar');
-    toast("❌ " + e.message, "err");
+    console.error('❌ Error enviarSheet:', e);
+    toast("❌ " + (e.message || 'Error de conexión'), "err");
     return null;
   }
 }
-
-
-  
 function setSyncState(s, t) {
   document.getElementById('sdot').className = 'sdot ' + s;
   document.getElementById('stxt').textContent = t;
