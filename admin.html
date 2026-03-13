@@ -1206,16 +1206,15 @@ async function sincronizar() {
   }
 }
 
+
   async function enviarSheet(payload) {
   setSyncState('syncing', 'Guardando…');
   try {
-    // Limpiar base64 grande de imagen
     const payloadLimpio = { ...payload };
     if (payloadLimpio.payload?.ImagenURL?.startsWith('data:')) {
       payloadLimpio.payload = { ...payloadLimpio.payload, ImagenURL: '' };
     }
-
-    // FormData evita preflight CORS — igual que el otro proyecto
+    // FormData igual que el proyecto de médicos
     const fd = new FormData();
     fd.append('data', JSON.stringify(payloadLimpio));
 
@@ -1232,7 +1231,6 @@ async function sincronizar() {
     return null;
   }
 }
-  
   
   function setSyncState(s, t) {
   document.getElementById('sdot').className = 'sdot ' + s;
@@ -1742,7 +1740,7 @@ async function guardarCliente() {
   cerrarModal('modal-cliente');
   filtrarClientes();
   renderDashboard();
-  await enviarSheet({ accion: "guardarCliente", payload });
+  await ({ accion: "guardarCliente", payload });
 }
 async function eliminarCliente(id) {
   const c = DB.clientes.find(x => x.ID === id); if (!c) return;
