@@ -1205,9 +1205,7 @@ async function sincronizar() {
     setSyncState('ok', 'Modo demo');
   }
 }
-
-
-  async function enviarSheet(payload) {
+async function enviarSheet(payload) {
   setSyncState('syncing', 'Guardando…');
   try {
     const payloadLimpio = { ...payload };
@@ -1240,7 +1238,8 @@ async function sincronizar() {
     return null;
   }
 }
-function setSyncState(s, t) {
+
+  function setSyncState(s, t) {
   document.getElementById('sdot').className = 'sdot ' + s;
   document.getElementById('stxt').textContent = t;
 }
