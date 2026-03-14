@@ -484,9 +484,9 @@ const SNAP = {
 const UMBRAL_ACTUALIZACION_MS = 10 * 60 * 1000;
 
 let NEGOCIO = {
-  nombre:"Mi Negocio", razonSocial:"", rfc:"", direccion:"",
-  telefono:"", email:"", web:"", costoEnvio:150, ivaRate:0.16, moneda:"MXN",
-  adminURL:"admin.html"
+  nombre:'', razonSocial:'', rfc:'', direccion:'',
+  telefono:'', email:'', web:'', costoEnvio:150, ivaRate:0.16, moneda:'MXN',
+  adminURL:'admin.html'
 };
 
 let cliente={}, carrito=[], productoActivo=null;
@@ -584,10 +584,10 @@ function entrarCatalogo(){
 // ══════════════════════════════════════════
 async function cargarConfig(){
   try{
-    const r=await fetch(APPS_SCRIPT_URL+"?accion=leerConfig&t="+Date.now());
+    const r=await fetch(APPS_SCRIPT_URL+"?accion=leerTodo&t="+Date.now());
     const d=await r.json();
-    // El Apps Script puede devolver la config en d.data o d.config
-    const c = d.config || d.data || {};
+    const c = d.config || {};
+    if(!Object.keys(c).length) return;
     if(!c || !Object.keys(c).length) return;
 
     if(c.NombreNegocio) NEGOCIO.nombre    = c.NombreNegocio;
@@ -603,8 +603,8 @@ async function cargarConfig(){
     if(c.AdminURL)   NEGOCIO.adminURL    = c.AdminURL;
     if(c.TextoSubtitulo) document.getElementById('txt-sub-inicio').textContent = c.TextoSubtitulo;
 
-    // 1. Nombre siempre — viene del Sheet
-    aplicarNombre(NEGOCIO.nombre);
+    // 1. Nombre siempre — viene del Sheet o fallback
+    aplicarNombre(NEGOCIO.nombre || 'Haz pedido desde aquí !!!');
 
     // 2. Logo encima del nombre — acepta LogoURL, Logo, logoURL, LogoBase64
     const logoSrc = c.LogoURL || c.Logo || c.logoURL || c.LogoBase64 || '';
